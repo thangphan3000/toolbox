@@ -1,6 +1,6 @@
 # Toolbox
 
-A tiny collection of network and crypto utilities that runs entirely in the browser. No build step, no dependencies, no backend - just three static files (`index.html`, `styles.css`, `app.js`) you can open directly from disk.
+A tiny collection of network, crypto, and diagram utilities that runs entirely in the browser. No build step, no backend - just three static files (`index.html`, `styles.css`, `app.js`) you can open directly from disk. The only external dependency is [mermaid](https://mermaid.js.org/), loaded from jsDelivr on demand when you open the mermaid tool.
 
 ## Contents
 
@@ -14,9 +14,10 @@ A tiny collection of network and crypto utilities that runs entirely in the brow
 
 - **CIDR IP Calculator** - single-input IPv4 subnet calculator with live results
 - **Crypto** - hashes, ROT13, secure random, and JWT decoder
+- **Mermaid** - live-rendered diagrams from mermaid source
 - Pixel-art cat logo in a dark navbar
 - Hash-based routing between the tool grid and individual tools
-- Works offline; no network requests, no external assets
+- Mermaid is fetched from jsDelivr on first open; every other tool works fully offline and sends no data anywhere
 
 ## Usage
 
@@ -41,11 +42,11 @@ python3 -m http.server 8000
 tools/
   index.html    markup for the navbar, tool grid, and every tool panel
   styles.css    all styling (navbar, cards, buttons, tool panels, results)
-  app.js        routing + the calculator/crypto logic
+  app.js        routing + the calculator/crypto/mermaid logic
   README.md
 ```
 
-There is no bundler, no framework, and no external CSS or JS. Everything is inline or same-origin.
+There is no bundler and no framework. The only runtime dependency is `mermaid.min.js`, fetched from jsDelivr the first time the mermaid tool opens.
 
 ## Tools
 
@@ -83,6 +84,18 @@ The result card has `copy` (writes to clipboard) and `swap` (moves the result ba
 
 JWT decode escapes user content before rendering; pasting a malicious token cannot inject HTML.
 
+### Mermaid
+
+Paste any [mermaid](https://mermaid.js.org/) source (flowcharts, sequence diagrams, class diagrams, state diagrams, etc.) on the left and the rendered SVG appears on the right. Rendering is live with a 350 ms debounce, and syntax errors show inline under the source without wiping the last good preview immediately.
+
+The mermaid library (~3.4 MB) is fetched from `cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js` the first time you open the tool; subsequent opens use the browser cache. Your diagram source and rendered SVGs never leave the browser - jsDelivr only sees the standard HTTP request for the script itself. Mermaid runs in `securityLevel: "strict"` so click-handlers embedded in diagrams are ignored.
+
+If you want to remove the CDN dependency, download the file next to `app.js` and change `script.src` in `loadMermaid` to `"./mermaid.min.js"`:
+
+```sh
+curl -sSL -o mermaid.min.js https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js
+```
+
 ## Adding a new tool
 
 1. **Enable the button.** In `index.html`, either enable one of the existing disabled buttons or add a new one:
@@ -109,10 +122,11 @@ JWT decode escapes user content before rendering; pasting a malicious token cann
    const panels = {
      cidr: document.getElementById("tool-cidr"),
      crypto: document.getElementById("tool-crypto"),
+     mermaid: document.getElementById("tool-mermaid"),
      mytool: document.getElementById("tool-mytool"),
    };
    ```
 
    The router picks up the new tool automatically from the hash (`#mytool`) and wires the back link.
 
-4. Write the tool logic in the same IIFE, following the pattern used by the CIDR and crypto sections.
+4. Write the tool logic in the same IIFE, following the pattern used by the existing tools. If your tool needs one-time setup on first open (e.g. lazy-loading a library like mermaid does), add an entry to the `onOpen` map next to `panels`.

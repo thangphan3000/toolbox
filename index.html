@@ -106,16 +106,21 @@
       <nav id="tool-grid" class="taskindex">
         <a href="#cidr" class="tool-btn" data-tool="cidr">cidr</a>
         <a href="#crypto" class="tool-btn" data-tool="crypto">crypto</a>
-        <a href="#" class="tool-btn disabled" aria-disabled="true">dns</a>
-        <a href="#" class="tool-btn disabled" aria-disabled="true">portcheck</a>
-        <a href="#" class="tool-btn disabled" aria-disabled="true">whois</a>
-        <a href="#" class="tool-btn disabled" aria-disabled="true">strings</a>
+        <a href="#mermaid" class="tool-btn" data-tool="mermaid">mermaid</a>
       </nav>
 
       <article id="tool-cidr" class="tool" hidden>
         <div class="tool-head">
-          <a href="#" class="back" id="back">&larr; back</a>
-          <h2>CIDR IP Calculator</h2>
+          <div class="tool-head-main">
+            <a href="#" class="back" id="back">&larr; back</a>
+            <h2>CIDR IP Calculator</h2>
+          </div>
+          <button type="button" class="focus-toggle" data-focus-toggle aria-pressed="false">
+            <svg class="focus-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+            </svg>
+            <span class="focus-label">full screen</span>
+          </button>
         </div>
 
         <form id="cidr-form" class="form" novalidate autocomplete="off">
@@ -159,8 +164,16 @@
 
       <article id="tool-crypto" class="tool" hidden>
         <div class="tool-head">
-          <a href="#" class="back" data-back>&larr; back</a>
-          <h2>Crypto</h2>
+          <div class="tool-head-main">
+            <a href="#" class="back" data-back>&larr; back</a>
+            <h2>Crypto</h2>
+          </div>
+          <button type="button" class="focus-toggle" data-focus-toggle aria-pressed="false">
+            <svg class="focus-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+            </svg>
+            <span class="focus-label">full screen</span>
+          </button>
         </div>
 
         <div class="field">
@@ -194,6 +207,55 @@
             </div>
           </div>
           <pre id="crypto-result" class="crypto-result"></pre>
+        </div>
+      </article>
+
+      <article id="tool-mermaid" class="tool" hidden>
+        <div class="tool-head">
+          <div class="tool-head-main">
+            <a href="#" class="back" data-back>&larr; back</a>
+            <h2>Mermaid</h2>
+          </div>
+          <button type="button" class="focus-toggle" data-focus-toggle aria-pressed="false">
+            <svg class="focus-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+            </svg>
+            <span class="focus-label">full screen</span>
+          </button>
+        </div>
+
+        <div class="mermaid-split" id="mermaid-split">
+          <div class="field mermaid-field">
+            <label for="mermaid-input">Source</label>
+            <textarea
+              id="mermaid-input"
+              rows="16"
+              spellcheck="false"
+              placeholder="flowchart TD..."
+            >flowchart TD
+    A[Start] --&gt; B{Is it working?}
+    B --&gt;|Yes| C[Ship it]
+    B --&gt;|No| D[Fix it]
+    D --&gt; B
+    C --&gt; E[Done]</textarea>
+            <p id="mermaid-error" class="error" role="alert" aria-live="polite"></p>
+          </div>
+
+          <div
+            id="mermaid-resizer"
+            class="mermaid-resizer"
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Drag to resize source and preview"
+            tabindex="0"
+          ></div>
+
+          <div class="mermaid-preview">
+            <span class="mermaid-preview-label">Preview</span>
+            <div id="mermaid-output" class="mermaid-output">
+              <span class="mermaid-placeholder">Loading mermaid...</span>
+            </div>
+          </div>
         </div>
       </article>
 

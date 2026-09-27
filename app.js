@@ -7,6 +7,11 @@
   const panels = {
     cidr: document.getElementById("tool-cidr"),
     crypto: document.getElementById("tool-crypto"),
+    mermaid: document.getElementById("tool-mermaid"),
+  };
+
+  const onOpen = {
+    mermaid: () => initMermaid(),
   };
 
   function showTool(name) {
@@ -15,6 +20,7 @@
     for (const [key, el] of Object.entries(panels)) {
       el.hidden = key !== name;
     }
+    if (isTool && onOpen[name]) onOpen[name]();
   }
 
   document.querySelectorAll(".tool-btn[data-tool]").forEach((el) => {
@@ -34,8 +40,34 @@
     el.addEventListener("click", (e) => {
       e.preventDefault();
       history.replaceState(null, "", "#");
+      setFocusMode(false);
       showTool(null);
     });
+  });
+
+  // ---------- focus (full-screen) mode ----------
+
+  const focusToggles = document.querySelectorAll("[data-focus-toggle]");
+
+  function setFocusMode(on) {
+    document.body.classList.toggle("focus-mode", on);
+    focusToggles.forEach((btn) => {
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      const label = btn.querySelector(".focus-label");
+      if (label) label.textContent = on ? "exit full screen" : "full screen";
+    });
+  }
+
+  focusToggles.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      setFocusMode(!document.body.classList.contains("focus-mode"));
+    });
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && document.body.classList.contains("focus-mode")) {
+      setFocusMode(false);
+    }
   });
 
   function toolFromHash() {
@@ -44,7 +76,6 @@
   }
 
   window.addEventListener("hashchange", () => showTool(toolFromHash()));
-  showTool(toolFromHash());
 
   // ---------- CIDR calculator ----------
 
@@ -521,4 +552,144 @@
       showCryptoError("Copy failed - your browser blocked clipboard access.");
     }
   });
+
+  // ---------- Mermaid tool ----------
+
+  const mermaidInput = document.getElementById("mermaid-input");
+  const mermaidOutput = document.getElementById("mermaid-output");
+  const mermaidErr = document.getElementById("mermaid-error");
+
+  let mermaidLoadPromise = null;
+  let mermaidRenderCounter = 0;
+  let mermaidInitialized = false;
+
+  function loadMermaid() {
+    if (mermaidLoadPromise) return mermaidLoadPromise;
+    mermaidLoadPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src =
+        "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
+      script.async = true;
+      script.onload = () => {
+        if (!window.mermaid) {
+          reject(new Error("mermaid loaded but window.mermaid is missing."));
+          return;
+        }
+        window.mermaid.initialize({
+          startOnLoad: false,
+          theme: "default",
+          securityLevel: "strict",
+          fontFamily: "Menlo, Consolas, monospace",
+        });
+        resolve(window.mermaid);
+      };
+      script.onerror = () =>
+        reject(new Error("Failed to load mermaid from the CDN."));
+      document.head.appendChild(script);
+    });
+    return mermaidLoadPromise;
+  }
+
+  async function renderMermaid() {
+    const source = mermaidInput.value.trim();
+    if (!source) {
+      mermaidOutput.innerHTML =
+        '<span class="mermaid-placeholder">Type mermaid source on the left.</span>';
+      mermaidErr.textContent = "";
+      return;
+    }
+    try {
+      const mermaid = await loadMermaid();
+      await mermaid.parse(source);
+      const id = "mermaid-svg-" + ++mermaidRenderCounter;
+      const { svg } = await mermaid.render(id, source);
+      mermaidOutput.innerHTML = svg;
+      mermaidErr.textContent = "";
+    } catch (err) {
+      const msg = (err && err.message) || String(err);
+      mermaidErr.textContent = msg.split("\n")[0].slice(0, 300);
+    }
+  }
+
+  const debouncedMermaid = debounce(renderMermaid, 350);
+  mermaidInput.addEventListener("input", debouncedMermaid);
+
+  // Split-pane resizer between source and preview.
+  const mermaidSplit = document.getElementById("mermaid-split");
+  const mermaidResizer = document.getElementById("mermaid-resizer");
+  const MERMAID_SPLIT_KEY = "mermaid-split-source-px";
+  const MIN_PANE = 200;
+  const RESIZER_W = 12;
+  const GAP = 8;
+
+  function applySourceWidth(px) {
+    mermaidSplit.style.setProperty("--mermaid-source", px + "px");
+  }
+
+  function clampSourceWidth(px) {
+    const total = mermaidSplit.getBoundingClientRect().width;
+    const max = total - RESIZER_W - GAP * 2 - MIN_PANE;
+    return Math.max(MIN_PANE, Math.min(max, px));
+  }
+
+  try {
+    const saved = parseFloat(localStorage.getItem(MERMAID_SPLIT_KEY));
+    if (Number.isFinite(saved) && saved > 0) applySourceWidth(saved);
+  } catch { /* localStorage may be unavailable */ }
+
+  let dragStartX = 0;
+  let dragStartWidth = 0;
+
+  function onDragMove(e) {
+    const dx = e.clientX - dragStartX;
+    applySourceWidth(clampSourceWidth(dragStartWidth + dx));
+  }
+
+  function onDragEnd() {
+    document.removeEventListener("mousemove", onDragMove);
+    document.removeEventListener("mouseup", onDragEnd);
+    document.body.classList.remove("mermaid-resizing");
+    mermaidResizer.classList.remove("dragging");
+    const px = parseFloat(mermaidSplit.style.getPropertyValue("--mermaid-source"));
+    if (Number.isFinite(px)) {
+      try { localStorage.setItem(MERMAID_SPLIT_KEY, String(px)); } catch {}
+    }
+  }
+
+  mermaidResizer.addEventListener("mousedown", (e) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    const field = mermaidSplit.querySelector(".mermaid-field");
+    dragStartX = e.clientX;
+    dragStartWidth = field.getBoundingClientRect().width;
+    document.body.classList.add("mermaid-resizing");
+    mermaidResizer.classList.add("dragging");
+    document.addEventListener("mousemove", onDragMove);
+    document.addEventListener("mouseup", onDragEnd);
+  });
+
+  mermaidResizer.addEventListener("dblclick", () => {
+    mermaidSplit.style.removeProperty("--mermaid-source");
+    try { localStorage.removeItem(MERMAID_SPLIT_KEY); } catch {}
+  });
+
+  mermaidResizer.addEventListener("keydown", (e) => {
+    const step = e.shiftKey ? 40 : 10;
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    const field = mermaidSplit.querySelector(".mermaid-field");
+    const current = field.getBoundingClientRect().width;
+    const next = clampSourceWidth(current + (e.key === "ArrowRight" ? step : -step));
+    applySourceWidth(next);
+    try { localStorage.setItem(MERMAID_SPLIT_KEY, String(next)); } catch {}
+  });
+
+  function initMermaid() {
+    if (mermaidInitialized) return;
+    mermaidInitialized = true;
+    renderMermaid();
+  }
+
+  // All tool state is now set up; safe to route to the initial hash.
+  showTool(toolFromHash());
 })();
