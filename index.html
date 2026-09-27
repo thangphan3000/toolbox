@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toolbox</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-inner flex">
+      <a href="#" class="brand" id="brand" aria-label="Toolbox home">
+        <svg
+          class="cat-logo"
+          viewBox="0 0 15 14"
+          xmlns="http://www.w3.org/2000/svg"
+          shape-rendering="crispEdges"
+          aria-hidden="true"
+        >
+          <!-- cream ear tips -->
+          <g fill="#f4d19c">
+            <rect x="1" y="0" width="2" height="1" />
+            <rect x="12" y="0" width="2" height="1" />
+            <rect x="0" y="1" width="4" height="1" />
+            <rect x="11" y="1" width="4" height="1" />
+          </g>
+          <!-- white face -->
+          <g fill="#ffffff">
+            <rect x="0" y="2" width="5" height="1" />
+            <rect x="10" y="2" width="5" height="1" />
+            <rect x="0" y="3" width="15" height="1" />
+            <rect x="0" y="4" width="15" height="1" />
+            <!-- eye row 1: fill around dark arcs -->
+            <rect x="0" y="5" width="2" height="1" />
+            <rect x="5" y="5" width="5" height="1" />
+            <rect x="13" y="5" width="2" height="1" />
+            <!-- eye row 2 -->
+            <rect x="0" y="6" width="1" height="1" />
+            <rect x="2" y="6" width="3" height="1" />
+            <rect x="6" y="6" width="3" height="1" />
+            <rect x="10" y="6" width="3" height="1" />
+            <rect x="14" y="6" width="1" height="1" />
+            <rect x="0" y="7" width="15" height="1" />
+            <!-- cheek/mouth row 1: white gaps around pink + mouth -->
+            <rect x="0" y="8" width="1" height="1" />
+            <rect x="2" y="8" width="1" height="1" />
+            <rect x="4" y="8" width="2" height="1" />
+            <rect x="9" y="8" width="2" height="1" />
+            <rect x="12" y="8" width="1" height="1" />
+            <rect x="14" y="8" width="1" height="1" />
+            <!-- cheek/mouth row 2 -->
+            <rect x="1" y="9" width="1" height="1" />
+            <rect x="3" y="9" width="1" height="1" />
+            <rect x="11" y="9" width="1" height="1" />
+            <rect x="13" y="9" width="1" height="1" />
+            <!-- mouth bottom row -->
+            <rect x="0" y="10" width="6" height="1" />
+            <rect x="9" y="10" width="6" height="1" />
+            <!-- lower face -->
+            <rect x="0" y="11" width="15" height="1" />
+            <rect x="1" y="12" width="13" height="1" />
+            <rect x="2" y="13" width="11" height="1" />
+          </g>
+          <!-- dark closed happy eyes -->
+          <g fill="#2b2d38">
+            <rect x="2" y="5" width="3" height="1" />
+            <rect x="10" y="5" width="3" height="1" />
+            <rect x="1" y="6" width="1" height="1" />
+            <rect x="5" y="6" width="1" height="1" />
+            <rect x="9" y="6" width="1" height="1" />
+            <rect x="13" y="6" width="1" height="1" />
+          </g>
+          <!-- pink zigzag cheeks -->
+          <g fill="#ff7fa0">
+            <rect x="1" y="8" width="1" height="1" />
+            <rect x="3" y="8" width="1" height="1" />
+            <rect x="11" y="8" width="1" height="1" />
+            <rect x="13" y="8" width="1" height="1" />
+            <rect x="0" y="9" width="1" height="1" />
+            <rect x="2" y="9" width="1" height="1" />
+            <rect x="4" y="9" width="1" height="1" />
+            <rect x="10" y="9" width="1" height="1" />
+            <rect x="12" y="9" width="1" height="1" />
+            <rect x="14" y="9" width="1" height="1" />
+          </g>
+          <!-- mouth outline -->
+          <g fill="#2b2d38">
+            <rect x="6" y="8" width="3" height="1" />
+            <rect x="5" y="9" width="1" height="1" />
+            <rect x="9" y="9" width="1" height="1" />
+            <rect x="6" y="10" width="3" height="1" />
+          </g>
+          <!-- pink tongue -->
+          <g fill="#ff5273">
+            <rect x="6" y="9" width="3" height="1" />
+          </g>
+        </svg>
+        <span class="brand-name">toolbox</span>
+      </a>
+    </div>
+  </header>
+
+  <section class="site">
+    <div class="content flex">
+
+      <nav id="tool-grid" class="taskindex">
+        <a href="#cidr" class="tool-btn" data-tool="cidr">cidr</a>
+        <a href="#crypto" class="tool-btn" data-tool="crypto">crypto</a>
+        <a href="#" class="tool-btn disabled" aria-disabled="true">dns</a>
+        <a href="#" class="tool-btn disabled" aria-disabled="true">portcheck</a>
+        <a href="#" class="tool-btn disabled" aria-disabled="true">whois</a>
+        <a href="#" class="tool-btn disabled" aria-disabled="true">strings</a>
+      </nav>
+
+      <article id="tool-cidr" class="tool" hidden>
+        <div class="tool-head">
+          <a href="#" class="back" id="back">&larr; back</a>
+          <h2>CIDR IP Calculator</h2>
+        </div>
+
+        <form id="cidr-form" class="form" novalidate autocomplete="off">
+          <div class="field">
+            <label for="ip">IP address / CIDR</label>
+            <input
+              id="ip"
+              name="ip"
+              type="text"
+              inputmode="text"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="192.168.1.10/24"
+              value="192.168.1.10/24"
+              required
+            />
+            <span class="hint">Omit the prefix to default to /32.</span>
+          </div>
+        </form>
+
+        <p id="error" class="error" role="alert" aria-live="polite"></p>
+
+        <div id="results" class="results" hidden>
+          <table class="result-table">
+            <tbody>
+              <tr><th>Network address</th><td id="r-network"></td></tr>
+              <tr><th>Broadcast address</th><td id="r-broadcast"></td></tr>
+              <tr><th>Subnet mask</th><td id="r-mask"></td></tr>
+              <tr><th>Wildcard mask</th><td id="r-wildcard"></td></tr>
+              <tr><th>First usable host</th><td id="r-first"></td></tr>
+              <tr><th>Last usable host</th><td id="r-last"></td></tr>
+              <tr><th>Total addresses</th><td id="r-total"></td></tr>
+              <tr><th>Usable hosts</th><td id="r-usable"></td></tr>
+              <tr><th>IP class</th><td id="r-class"></td></tr>
+              <tr><th>Type</th><td id="r-type"></td></tr>
+              <tr><th>Binary</th><td><code id="r-binary" class="binary"></code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article id="tool-crypto" class="tool" hidden>
+        <div class="tool-head">
+          <a href="#" class="back" data-back>&larr; back</a>
+          <h2>Crypto</h2>
+        </div>
+
+        <div class="field">
+          <label for="crypto-input">Input</label>
+          <textarea
+            id="crypto-input"
+            rows="8"
+            spellcheck="false"
+            placeholder="Enter text, or paste a JWT to decode..."
+          ></textarea>
+        </div>
+
+        <div class="crypto-ops">
+          <button type="button" class="op-btn" data-op="md5">hash md5</button>
+          <button type="button" class="op-btn" data-op="sha1">hash sha1</button>
+          <button type="button" class="op-btn" data-op="sha256">hash sha256</button>
+          <button type="button" class="op-btn" data-op="rot13">rot 13</button>
+          <button type="button" class="op-btn" data-op="random">random 1-100</button>
+          <button type="button" class="op-btn" data-op="password">random password</button>
+          <button type="button" class="op-btn" data-op="jwt">decode jwt</button>
+        </div>
+
+        <p id="crypto-error" class="error" role="alert" aria-live="polite"></p>
+
+        <div id="crypto-output" class="crypto-output" hidden>
+          <div class="crypto-output-head">
+            <span id="crypto-op-label" class="op-label"></span>
+            <div class="crypto-actions">
+              <a href="#" id="crypto-copy" class="link-action">copy</a>
+              <a href="#" id="crypto-swap" class="link-action">swap</a>
+            </div>
+          </div>
+          <pre id="crypto-result" class="crypto-result"></pre>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>

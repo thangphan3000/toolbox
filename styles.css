@@ -1,0 +1,379 @@
+body {
+  font-family: Arial, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #292929;
+  background-color: #F6F4F1;
+}
+
+.site {
+  display: block;
+  min-height: 100vh;
+  padding: 40px 10px;
+  background-color: #F6F4F1;
+}
+
+.flex {
+  width: 1000px;
+  display: block;
+  margin: 0 auto;
+  clear: both;
+}
+
+/* --- navbar + cat logo --- */
+
+.navbar {
+  background: #1c1d24;
+  border-bottom: 1px solid #000;
+  height: 60px;
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #ffffff;
+  user-select: none;
+  line-height: 1;
+}
+
+.cat-logo {
+  width: 36px;
+  height: auto;
+  color: #ffffff;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+}
+
+.brand:hover .cat-logo {
+  transform: rotate(-10deg) scale(1.1);
+}
+
+.brand-name {
+  font-family: Menlo, Consolas, monospace;
+  font-size: 15px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* --- tool button grid (funix taskindex style) --- */
+
+.taskindex {
+  display: grid;
+  grid-template-columns: repeat(2, 200px);
+  gap: 8px 12px;
+  justify-content: start;
+  padding-top: 10px;
+}
+
+.tool-btn {
+  font-size: 18px;
+  border: 1px solid black;
+  display: block;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: black;
+  background: transparent;
+  font-family: Arial, Verdana, sans-serif;
+}
+
+.tool-btn:hover {
+  background-color: #555;
+  color: white;
+}
+
+.tool-btn.disabled {
+  color: #999;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+.tool-btn.disabled:hover {
+  background-color: transparent;
+  color: #999;
+}
+
+/* --- tool panel --- */
+
+.tool {
+  background: #ffffff;
+  border: 1px solid silver;
+  padding: 20px 24px 24px;
+  margin-top: 10px;
+}
+
+.tool-head {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.tool-head h2 {
+  margin: 6px 0 0;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.back {
+  color: #555;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+/* --- form --- */
+
+.form {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 240px;
+}
+
+.field-small {
+  flex: 0 0 130px;
+}
+
+.field label {
+  font-size: 12px;
+  color: #555;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.field input {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #bbb;
+  background: #fff;
+  font-family: Menlo, Consolas, monospace;
+  font-size: 14px;
+  color: #292929;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #6b7c93;
+  box-shadow: 0 0 0 2px rgba(107, 124, 147, 0.2);
+}
+
+.hint {
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.btn {
+  height: 36px;
+  padding: 0 20px;
+  border: 1px solid #292929;
+  background: #292929;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #000;
+}
+
+.error {
+  margin: 12px 0 0;
+  min-height: 1.2em;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+/* --- results --- */
+
+.results {
+  margin-top: 20px;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.result-table th,
+.result-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+
+.result-table th {
+  width: 200px;
+  font-weight: normal;
+  color: #555;
+  background: #fafaf7;
+}
+
+.result-table td {
+  font-family: Menlo, Consolas, monospace;
+  color: #292929;
+  word-break: break-all;
+}
+
+.binary {
+  font-family: Menlo, Consolas, monospace;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow-x: auto;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.binary .octet-network {
+  color: #1d4ed8;
+  font-weight: bold;
+}
+
+/* --- crypto tool --- */
+
+textarea#crypto-input {
+  width: 100%;
+  min-height: 160px;
+  padding: 10px 12px;
+  border: 1px solid #bbb;
+  background: #fff;
+  font-family: Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: #292929;
+  box-sizing: border-box;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+textarea#crypto-input:focus {
+  outline: none;
+  border-color: #6b7c93;
+  box-shadow: 0 0 0 2px rgba(107, 124, 147, 0.2);
+}
+
+.crypto-ops {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.op-btn {
+  font-size: 14px;
+  border: 1px solid black;
+  background: #fff;
+  color: #292929;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-family: Arial, Verdana, sans-serif;
+}
+
+.op-btn:hover {
+  background: #555;
+  color: white;
+}
+
+.crypto-output {
+  margin-top: 20px;
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+}
+
+.crypto-output-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.op-label {
+  font-family: Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: #555;
+}
+
+.crypto-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.link-action {
+  color: #1d4ed8;
+  text-decoration: underline;
+  font-size: 13px;
+}
+
+.link-action:hover {
+  color: #1e40af;
+}
+
+.crypto-result {
+  margin: 0;
+  padding: 14px;
+  background: #fafaf7;
+  border: 1px solid #eee;
+  font-family: Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: #292929;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.5;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.crypto-result .jwt-section {
+  color: #555;
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+}
+
+.crypto-result .jwt-section:first-child {
+  margin-top: 0;
+}
+
+/* --- narrow screens --- */
+
+@media (max-width: 1020px) {
+  .flex {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 520px) {
+  .taskindex {
+    grid-template-columns: 1fr;
+  }
+}
